@@ -1,7 +1,6 @@
 import {
   createMqConnection,
-  // pubMq,
-  pubMqWithConfirm,
+  pubMq,
 } from '../dist'
 
 const vhost = 'dform'
@@ -10,8 +9,8 @@ const routingKey = 'wawawawa'
 
 async function test() {
   const { channel } = await createMqConnection({ vhost })
-
-  await pubMqWithConfirm({
+  // await channel.close()
+  await pubMq({
     channel,
     exchange,
     routingKey,

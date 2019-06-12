@@ -36,12 +36,13 @@ async function pubMq({
     } else {
       channel.publish(exchange, routingKey, Buffer.from(JSON.stringify(data)), { persistent }, async err => {
         if (err !== null) {
+          logger.error(`msg nacked in publish, routingKey is ${routingKey}`)
           await logMq({
             ...logOptions,
             status: 1,
           })
         } else {
-          logger.info(`msg acked, routingKey is ${routingKey}`)
+          logger.info(`msg acked in publish, routingKey is ${routingKey}`)
           if (confirmPub) {
             await logMq({ ...logOptions, status: 2 })
           }
