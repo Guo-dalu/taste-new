@@ -1,0 +1,23 @@
+{
+  "presets": [
+    [
+      "@babel/preset-env",
+      { 
+        // 否则 Babel 会在 Rollup 处理前，把我们的模块转译为 CommonJS 风格，导致 Rollup 执行失败。
+        "modules": false 
+      }
+    ]
+  ],
+  "plugins": [
+    [
+      "@babel/plugin-proposal-decorators",
+      {
+        "legacy": true
+      }
+    ],
+    "@babel/plugin-transform-runtime",
+    "@babel/plugin-proposal-optional-chaining",
+    "dynamic-import-node",
+  ],
+  "comments": false,
+}
