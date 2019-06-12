@@ -1,3 +1,27 @@
-import { createMqConnection } from '../dist'
+import {
+  createMqConnection,
+  // pubMq,
+  pubMqWithConfirm,
+} from '../dist'
 
-createMqConnection({ vhost: 'dform', onConnect: ({ connection, url }) => { console.log(url, connection) } })
+const vhost = 'dform'
+const exchange = 'lalala'
+const routingKey = 'wawawawa'
+
+async function test() {
+  const { channel } = await createMqConnection({ vhost })
+
+  await pubMqWithConfirm({
+    channel,
+    exchange,
+    routingKey,
+    exchangeType: 'topic',
+    data: 0,
+  })
+}
+
+test()
+
+process.on('unhandledRejection', e => {
+  console.log(e)
+})

@@ -10,7 +10,8 @@
     "start": "export NODE_ENV=test && babel-node ./example/index.js --presets @babel/env",
     "watch": "NODE_ENV=development rollup -w -c",
     "dev": "NODE_ENV=development rollup -c",
-    "build": "rimraf dist && NODE_ENV=production rollup -c"
+    "build": "rimraf dist && NODE_ENV=production rollup -c",
+    "eslint": "eslint src"
   },
   "author": "xuemengge@xingshulin.com",
   "devDependencies": {
@@ -41,6 +42,7 @@
   "dependencies": {
     "amqp-connection-manager": "^2.3.1",
     "amqplib": "^0.5.3",
+    "bluebird": "^3.5.5",
     "mongoose": "^5.5.14",
     "rimraf": "^2.6.3"
   },

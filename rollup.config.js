@@ -6,16 +6,17 @@ import { terser } from 'rollup-plugin-terser'
 import { eslint } from 'rollup-plugin-eslint'
 
 const commonConfig = {
-  input: 'src/index.js',
+  input: ['src/index.js', 'src/logMq.js'],
   output: {
     dir: './dist',
     format: 'cjs',
-    chunkFileNames: '[name].js',
   },
   plugins: [
     json(),
     nodeResolve({
-      dedupe: ['readable-stream'],
+      customResolveOptions: {
+        moduleDirectory: 'node_modules',
+      },
     }),
     commonjs({
       include: './node_modules/**',
@@ -31,14 +32,18 @@ const commonConfig = {
       runtimeHelpers: true,
     }),
   ],
+  external: ['mongoose', 'bluebird'],
 }
 
-const { input, output, plugins } = commonConfig
+const {
+  input, output, plugins, external,
+} = commonConfig
 
 const developmentConfig = {
   input,
   output: { ...output, sourcemap: true },
   plugins,
+  external,
 }
 
 const productionConfig = {
@@ -55,8 +60,8 @@ const productionConfig = {
       sourcemap: false,
     }),
   ]),
-  experimentalCodeSplitting: true,
   experimentalDynamicImport: true,
+  external,
 }
 
 const config = process.env.NODE_ENV === 'development' ? developmentConfig : productionConfig
