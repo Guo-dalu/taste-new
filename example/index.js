@@ -1,7 +1,4 @@
-import {
-  createMqConnection,
-  pubMq,
-} from '../dist'
+import { createMqConnection, pubMq, consumeMqAutoAck } from '../dist'
 
 const vhost = 'dform'
 const exchange = 'lalala'
@@ -9,14 +6,27 @@ const routingKey = 'wawawawa'
 
 async function test() {
   const { channel } = await createMqConnection({ vhost })
-  // await channel.close()
-  await pubMq({
+  await consumeMqAutoAck({
     channel,
-    exchange,
+    exchange: { name: 'lalala', type: 'topic' },
+    queue: { name: 'bulabula', assertOptions: { exclusive: true } },
     routingKey,
-    exchangeType: 'topic',
-    data: 0,
+    consume: {
+      consumeHandler: async msg => {
+        console.log(msg.content.toString(), '-----msg')
+      },
+    },
+    confirmConsume: 1,
   })
+  setTimeout(() => {
+    pubMq({
+      channel,
+      exchange,
+      routingKey,
+      exchangeType: 'topic',
+      data: 's',
+    })
+  }, 1500)
 }
 
 test()

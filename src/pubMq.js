@@ -30,11 +30,13 @@ async function pubMq({
     })
   }
   try {
-    channel.addSetup(ch => ch.assertExchange(exchange, exchangeType, { durable: true }))
+    channel.addSetup(ch => {
+      ch.assertExchange(exchange, exchangeType, { durable: true })
+    })
     if (!warnPub && !confirmPub) {
-      await channel.publish(exchange, routingKey, Buffer.from(JSON.stringify(data)), { persistent })
+      await channel.publish(exchange, routingKey, data, { persistent })
     } else {
-      channel.publish(exchange, routingKey, Buffer.from(JSON.stringify(data)), { persistent }, async err => {
+      channel.publish(exchange, routingKey, data, { persistent }, async err => {
         if (err !== null) {
           logger.error(`msg nacked in publish, routingKey is ${routingKey}`)
           await logMq({

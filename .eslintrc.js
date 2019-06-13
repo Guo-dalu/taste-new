@@ -54,6 +54,7 @@ module.exports = {
     'id-length': 0,
     'consistent-return': 0,
     'class-methods-use-this': 0,
+    'no-unused-expressions': 0,
     'max-len': [
       2,
       120,
