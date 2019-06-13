@@ -12,4 +12,4 @@ npm run dev: 在development环境下打包src
 
 npm run build: 在production环境下打包src，等于prepublish
 
-其中，npm run start-w, npm run start 可以供测试人员编写测试代码。
+其中，npm run start-w, npm run start 可以供测试人员编写测试代码。在运行这两个程序之前，需要先npm run dev/npm run watch/npm run build 一次，以获得打包后的dist代码。
