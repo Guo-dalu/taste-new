@@ -1,4 +1,5 @@
-import { createMqConnection, pubMq, consumeMqAutoAck } from '../dist'
+import { createMqConnection, pubMq, consumeMqAutoAck } from '../src'
+import mqModel from '../src/model'
 
 const vhost = 'dform'
 const exchange = 'lalala'
@@ -16,7 +17,7 @@ async function test() {
         console.log(msg.content.toString(), '-----msg')
       },
     },
-    confirmConsume: 1,
+    logConsume: 1,
   })
   setTimeout(() => {
     pubMq({
@@ -29,7 +30,15 @@ async function test() {
   }, 1500)
 }
 
-test()
+
+async function verifyLog() {
+  await test()
+  const a = await mqModel.findOne({}).sort({ createtime: -1 })
+  console.log(a.data.content.toString())
+}
+
+verifyLog()
+
 
 process.on('unhandledRejection', e => {
   console.log(e)

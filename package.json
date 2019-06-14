@@ -2,10 +2,14 @@
   "name": "@xsl/amqp",
   "version": "1.0.0",
   "description": "rabbitmq utils for all nodejs service in xsl",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/benbria/node-amqp-connection-manager"
+  },
   "main": "dist/index.js",
   "module": "dist/index.js",
   "scripts": {
-    "test": "export BABEL_ENV=test && mocha",
+    "test": "export NODE_ENV=unittest && mocha --fgrep publish",
     "start-w": "export NODE_ENV=test && nodemon --exec babel-node ./example/index.js --presets @babel/env",
     "start": "export NODE_ENV=test && babel-node ./example/index.js --presets @babel/env",
     "watch": "NODE_ENV=development rollup -w -c",
@@ -21,6 +25,7 @@
     "@babel/plugin-proposal-optional-chaining": "^7.2.0",
     "@babel/plugin-transform-runtime": "^7.4.4",
     "@babel/preset-env": "^7.4.5",
+    "@babel/register": "^7.4.4",
     "@babel/runtime": "^7.4.5",
     "babel-eslint": "^10.0.1",
     "babel-plugin-dynamic-import-node": "^2.2.0",
@@ -40,8 +45,8 @@
     "rollup-plugin-terser": "^5.0.0"
   },
   "dependencies": {
-    "amqp-connection-manager": "^2.3.1",
     "amqplib": "^0.5.3",
+    "amqp-connection-manager": "^2.3.1",
     "bluebird": "^3.5.5",
     "mongoose": "^5.5.14",
     "rimraf": "^2.6.3"

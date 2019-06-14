@@ -89,5 +89,8 @@ module.exports = {
     console: true,
     logger: true,
     env: true,
+    before: true,
+    after: true,
+    global: true
   },
 }

@@ -14,7 +14,7 @@ async function pubMq({
   let logMq
   let logOptions
   if (logPub || warnPub || confirmPub) {
-    logMq = (await import('./logMq')).default
+    logMq = (await import('./logMq')).log
     logOptions = {
       exchange,
       routingKey,
@@ -36,20 +36,23 @@ async function pubMq({
     if (!warnPub && !confirmPub) {
       await channel.publish(exchange, routingKey, data, { persistent })
     } else {
-      channel.publish(exchange, routingKey, data, { persistent }, async err => {
-        if (err !== null) {
-          logger.error(`msg nacked in publish, routingKey is ${routingKey}`)
-          await logMq({
-            ...logOptions,
-            status: 1,
-          })
-        } else {
-          logger.info(`msg acked in publish, routingKey is ${routingKey}`)
-          if (confirmPub) {
-            await logMq({ ...logOptions, status: 2 })
+      const publishPromise = () => new Promise((resolve) => {
+        channel.publish(exchange, routingKey, data, { persistent }, err => {
+          if (err !== null) {
+            logger.error(`msg nacked in publish, routingKey is ${routingKey}, ${err.stack}`)
+            logMq({
+              ...logOptions,
+              status: 1,
+            }).then(resolve)
+          } else {
+            logger.info(`msg acked in publish, routingKey is ${routingKey}`)
+            if (confirmPub) {
+              logMq({ ...logOptions, status: 2 }).then(resolve)
+            }
           }
-        }
+        })
       })
+      await publishPromise()
     }
   } catch (e) {
     logger.error(`publish 消息错误, routing key is ${routingKey}`, e)

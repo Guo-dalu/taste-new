@@ -2,10 +2,10 @@
   "presets": [
     [
       "@babel/preset-env",
-      { 
-        // 给test和example文件使用
-        "modules": "cjs",
-      } 
+      {
+        // 否则 Babel 会在 Rollup 处理前，把我们的模块转译为 CommonJS 风格，导致 Rollup 执行失败。
+        "modules": false,
+      }
     ]
   ],
   "plugins": [

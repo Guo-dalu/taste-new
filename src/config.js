@@ -13,6 +13,8 @@ const config = {
   },
 }
 
+config.unittest = config.test
+
 let env
 if (process.env.EGG_SERVER_ENV === 'prod' || process.env.EGG_SERVER_ENV === 'production') {
   env = 'production'

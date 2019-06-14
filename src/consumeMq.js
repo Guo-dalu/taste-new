@@ -20,7 +20,8 @@ async function consumeMq({
   let logMq
   let logOptions
   if (logConsume || warnConsume || confirmConsume) {
-    logMq = (await import('./logMq')).default
+    // eslint-disable-next-line
+    logMq = (await import('./logMq')).log
     logOptions = {
       exchange: exchangeName,
       routingKey,
@@ -29,14 +30,14 @@ async function consumeMq({
       exchangeType: type,
     }
   }
-  const logConsumeIfNeeded = async () => {
-    logConsume && (await logMq({ ...logOptions, status: 3 }))
+  const logConsumeIfNeeded = async (data) => {
+    logConsume && (await logMq({ ...logOptions, data, status: 3 }))
   }
-  const warnConsumeIfNeeded = async () => {
-    warnConsume && (await logMq({ ...logOptions, status: 4 }))
+  const warnConsumeIfNeeded = async (data) => {
+    warnConsume && (await logMq({ ...logOptions, data, status: 4 }))
   }
-  const confirmConsumeIfNeeded = async () => {
-    confirmConsume && (await logMq({ ...logOptions, status: 5 }))
+  const confirmConsumeIfNeeded = async (data) => {
+    confirmConsume && (await logMq({ ...logOptions, data, status: 5 }))
   }
   try {
     channel.addSetup(async ch => {
@@ -49,18 +50,18 @@ async function consumeMq({
       await ch.consume(
         queueName,
         async msg => {
-          await logConsumeIfNeeded()
+          await logConsumeIfNeeded(msg)
           const shouldAck = autoAck && !consumeOptions?.noAck
           // 自动处理ack
           try {
             await consumeHandler.apply(consume, [msg, { channel: ch, exchange, queue }])
             shouldAck && await ch.ack(msg)
             logger.info(`msg consumed and acked in queue  ${queueName}`)
-            await confirmConsumeIfNeeded()
+            await confirmConsumeIfNeeded(msg)
           } catch (err) {
             logger.info(`msg consumed with error and nacked in queue  ${queueName} ${err.stack}`)
             shouldAck && await ch.nack(msg, false, false)
-            await warnConsumeIfNeeded()
+            await warnConsumeIfNeeded(msg)
           }
         },
         { noAck: false, ...consumeOptions }
@@ -71,6 +72,7 @@ async function consumeMq({
     logger.info('----- mq Listening for messages')
   } catch (e) {
     logger.error(`consume 消息错误, ${queueName}, ${e.stack}`)
+    await warnConsumeIfNeeded(e)
   }
 }
 

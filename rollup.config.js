@@ -32,7 +32,7 @@ const commonConfig = {
       runtimeHelpers: true,
     }),
   ],
-  external: ['mongoose', 'bluebird'],
+  external: ['mongoose', 'bluebird', 'amqplib'],
 }
 
 const {
@@ -60,7 +60,7 @@ const productionConfig = {
       sourcemap: false,
     }),
   ]),
-  experimentalDynamicImport: true,
+  experimentalOptimizeChunks: true,
   external,
 }
 
