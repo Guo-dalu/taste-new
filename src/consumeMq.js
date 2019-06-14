@@ -12,8 +12,9 @@ async function consumeMq({
   warnConsume = true,
   confirmConsume,
   autoAck,
+  extras,
 }) {
-  const { name: exchangeName, type, options } = exchange
+  const { name: exchangeName, type = 'topic', options } = exchange
   const { name: queueName, assertOptions, bindOptions } = queue
   const { consumeHandler, options: consumeOptions } = consume
 
@@ -28,6 +29,7 @@ async function consumeMq({
       queue: queueName,
       type: 'consume',
       exchangeType: type,
+      extras,
     }
   }
   const logConsumeIfNeeded = async (data) => {

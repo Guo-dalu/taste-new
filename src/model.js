@@ -12,6 +12,7 @@ const MqSchema = new Schema(
     data: {},
     // 0 logPub 记录做了发消息的动作 1 warnpub 2 confirmPub 发的消息rabbitmq收到了 3 logConsume 4 warnConsume 5 confirmConsume
     status: { type: Number, default: -1, require: true },
+    extras: {},
     createtime: { type: Date, default: Date.now, require: true },
     updatetime: { type: Date, default: Date.now, require: true },
   },

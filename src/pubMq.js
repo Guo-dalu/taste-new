@@ -3,13 +3,14 @@ import logger from './logger'
 async function pubMq({
   channel,
   exchange,
-  exchangeType,
+  exchangeType = 'topic',
   routingKey,
   data,
   logPub,
   warnPub = true,
   confirmPub,
   persistent,
+  extras,
 }) {
   let logMq
   let logOptions
@@ -21,6 +22,7 @@ async function pubMq({
       type: 'publish',
       data,
       exchangeType,
+      extras,
     }
   }
   if (logPub) {
@@ -49,6 +51,7 @@ async function pubMq({
             if (confirmPub) {
               logMq({ ...logOptions, status: 2 }).then(resolve)
             }
+            resolve()
           }
         })
       })
