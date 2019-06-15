@@ -88,8 +88,10 @@ const consumeMqWithNone = args => consumeMq({
   confirmConsume: false,
 })
 
+const consumeMqWithLog = args => consumeMq({ ...args, logConsume: true })
+
 const consumeMqAutoAckWithConfirm = args => consumeMq({ ...args, confirmConsume: true, autoAck: true })
 
 export {
-  consumeMq, consumeMqAutoAck, consumeMqWithNone, consumeMqAutoAckWithConfirm,
+  consumeMq, consumeMqAutoAck, consumeMqWithNone, consumeMqAutoAckWithConfirm, consumeMqWithLog,
 }

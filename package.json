@@ -9,12 +9,12 @@
   "main": "dist/index.js",
   "module": "dist/index.js",
   "scripts": {
-    "test": "export NODE_ENV=unittest && mocha --fgrep publish",
+    "test": "npm run build && export NODE_ENV=unittest && mocha",
     "start-w": "export NODE_ENV=test && nodemon --exec babel-node ./example/index.js --presets @babel/env",
     "start": "export NODE_ENV=test && babel-node ./example/index.js --presets @babel/env",
     "watch": "NODE_ENV=development rollup -w -c",
     "dev": "NODE_ENV=development rollup -c",
-    "build": "rimraf dist && NODE_ENV=production rollup -c",
+    "build": "npm run eslint && rimraf dist && NODE_ENV=production rollup -c",
     "eslint": "eslint src"
   },
   "author": "xuemengge@xingshulin.com",

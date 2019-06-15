@@ -26,36 +26,27 @@ describe('test publish message', () => {
     await MqModel.deleteMany({ data })
   })
 
+  const createPubOption = () => ({
+    channel,
+    exchange,
+    routingKey,
+    exchangeType: 'topic',
+    data,
+    extras: data,
+  })
+
   it('should publish a message successfully', async () => {
-    await pubMq({
-      channel,
-      exchange,
-      routingKey,
-      exchangeType: 'topic',
-      data,
-    })
+    await pubMq(createPubOption())
   })
 
   it('should log and publish a message successfully', async () => {
-    await pubMqWithLog({
-      channel,
-      exchange,
-      routingKey,
-      exchangeType: 'topic',
-      data,
-    })
+    await pubMqWithLog(createPubOption())
     const { status } = await MqModel.findOne({ data })
     assert.equal(status, 0)
   })
 
   it('should publish and confirm a message successfully', async () => {
-    await pubMqWithConfirm({
-      channel,
-      exchange,
-      routingKey,
-      exchangeType: 'topic',
-      data,
-    })
+    await pubMqWithConfirm(createPubOption())
     const { status } = await MqModel.findOne({ data })
     assert.equal(status, 2)
   })
@@ -63,11 +54,8 @@ describe('test publish message', () => {
   it('should not publish a message, and log warn', async () => {
     const extras = data
     await pubMq({
-      channel,
-      exchange,
-      routingKey,
+      ...createPubOption(),
       data: () => {},
-      extras,
     })
     const { status } = await MqModel.findOne({ extras })
     assert.equal(status, 1)

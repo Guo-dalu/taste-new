@@ -7,5 +7,5 @@ export {
 } from './pubMq'
 
 export {
-  consumeMq, consumeMqAutoAck, consumeMqWithNone, consumeMqAutoAckWithConfirm,
+  consumeMq, consumeMqAutoAck, consumeMqWithNone, consumeMqAutoAckWithConfirm, consumeMqWithLog,
 } from './consumeMq'
