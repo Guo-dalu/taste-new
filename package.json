@@ -4,7 +4,7 @@
   "description": "rabbitmq utils for all nodejs service in xsl",
   "repository": {
     "type": "git",
-    "url": "https://github.com/benbria/node-amqp-connection-manager"
+    "url": "http://code.xingshulin.com/npm/xsl-amqp"
   },
   "main": "dist/index.js",
   "module": "dist/index.js",
