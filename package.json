@@ -10,6 +10,7 @@
   "module": "dist/index.js",
   "scripts": {
     "test": "npm run build && export NODE_ENV=unittest && mocha",
+    "unittest": "export NODE_ENV=unittest && mocha",
     "start-w": "export NODE_ENV=test && nodemon --exec babel-node ./example/index.js --presets @babel/env",
     "start": "export NODE_ENV=test && babel-node ./example/index.js --presets @babel/env",
     "watch": "NODE_ENV=development rollup -w -c",

@@ -10,7 +10,7 @@ async function test() {
   await consumeMqAutoAck({
     channel,
     exchange: { name: 'lalala', type: 'topic' },
-    queue: { name: 'bulabula', assertOptions: { exclusive: true } },
+    queue: { name: 'bulabula' },
     routingKey,
     consume: {
       consumeHandler: async msg => {
@@ -34,7 +34,7 @@ async function test() {
 async function verifyLog() {
   await test()
   const a = await mqModel.findOne({}).sort({ createtime: -1 })
-  console.log(a.data.content.toString())
+  console.log({ a })
 }
 
 verifyLog()

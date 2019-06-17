@@ -1,6 +1,8 @@
 cd 到该文件夹下，npm i 之后运行以下脚本可分别执行如下命令：
 
-npm run test: 跑单元测试
+npm run unittest: 运行单元测试
+
+npm run test: 依次运行eslint检查，打包压缩，单元测试
 
 npm run start-w: 监视模式运行./example/index.js，如果index.js文件发生更改，会重新运行
 
