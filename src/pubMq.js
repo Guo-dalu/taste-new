@@ -3,21 +3,22 @@ import logger from './logger'
 async function pubMq({
   channel,
   exchange,
-  exchangeType = 'topic',
   routingKey,
   data,
   logPub,
   warnPub = true,
   confirmPub,
-  persistent,
+  publishOptions,
   extras,
 }) {
+  const { name: exchangeName, type: exchangeType = 'topic', options } = exchange
+
   let logMq
   let logOptions
   if (logPub || warnPub || confirmPub) {
     logMq = (await import('./logMq')).log
     logOptions = {
-      exchange,
+      exchange: exchangeName,
       routingKey,
       type: 'publish',
       data,
@@ -25,32 +26,32 @@ async function pubMq({
       extras,
     }
   }
-  if (logPub) {
-    await logMq({
-      ...logOptions,
-      status: 0,
-    })
+  const logPubIfNeeded = async () => {
+    logPub && (await logMq({ ...logOptions, status: 0 }))
+  }
+  const warnPubIfNeeded = async () => {
+    warnPub && (await logMq({ ...logOptions, status: 1 }))
+  }
+  const confirmPubIfNeeded = async () => {
+    confirmPub && (await logMq({ ...logOptions, status: 2 }))
   }
   try {
     channel.addSetup(ch => {
-      ch.assertExchange(exchange, exchangeType, { durable: true })
+      ch.assertExchange(exchangeName, exchangeType, { durable: true, ...options })
     })
+    await logPubIfNeeded()
     if (!warnPub && !confirmPub) {
-      await channel.publish(exchange, routingKey, data, { persistent })
+      await channel.publish(exchangeName, routingKey, data, publishOptions)
     } else {
-      const publishPromise = () => new Promise((resolve) => {
-        channel.publish(exchange, routingKey, data, { persistent }, err => {
+      const publishPromise = () => new Promise(resolve => {
+        channel.publish(exchangeName, routingKey, data, publishOptions, err => {
           if (err !== null) {
             logger.error(`msg nacked in publish, routingKey is ${routingKey}, ${err.stack}`)
-            logMq({
-              ...logOptions,
-              status: 1,
-            }).then(resolve)
+            warnPubIfNeeded()
+            resolve()
           } else {
             logger.info(`msg acked in publish, routingKey is ${routingKey}`)
-            if (confirmPub) {
-              logMq({ ...logOptions, status: 2 }).then(resolve)
-            }
+            confirmPubIfNeeded()
             resolve()
           }
         })
@@ -59,12 +60,7 @@ async function pubMq({
     }
   } catch (e) {
     logger.error(`publish 消息错误, routing key is ${routingKey}`, e)
-    if (warnPub) {
-      await logMq({
-        ...logOptions,
-        status: 1,
-      })
-    }
+    warnPubIfNeeded()
   }
 }
 

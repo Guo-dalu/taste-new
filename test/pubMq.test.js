@@ -7,7 +7,7 @@ import { MqModel } from '../dist/logMq'
 /* eslint-disable  no-underscore-dangle */
 
 const vhost = 'dform'
-const exchange = 'lalala'
+const exchange = { name: 'lalala' }
 const routingKey = 'wawawawa'
 
 describe('test publish message', () => {
@@ -30,7 +30,6 @@ describe('test publish message', () => {
     channel,
     exchange,
     routingKey,
-    exchangeType: 'topic',
     data,
     extras: data,
   })

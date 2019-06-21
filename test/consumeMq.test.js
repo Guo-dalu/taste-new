@@ -20,7 +20,7 @@ describe('test consume message', async () => {
   const pubTest = async n => {
     await pubMq({
       channel,
-      exchange: exchange.name,
+      exchange,
       routingKey: routingKeys[n],
       data: extras,
       extras,
