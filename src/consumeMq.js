@@ -58,7 +58,7 @@ async function consumeMq({
           try {
             await consumeHandler.apply(consume, [msg, { channel: ch, exchange, queue }])
             shouldAck && await ch.ack(msg)
-            logger.info(`msg consumed and acked in queue  ${queueName}`)
+            logger.info(`msg consumed in queue  ${queueName}`)
             await confirmConsumeIfNeeded(msg)
           } catch (err) {
             logger.info(`msg consumed with error and nacked in queue  ${queueName} ${err.stack}`)
