@@ -2,14 +2,14 @@ import { createMqConnection, pubMq, consumeMqAutoAck } from '../src'
 import mqModel from '../src/model'
 
 const vhost = 'dform'
-const exchange = 'lalala'
+const exchange = { name: 'lalala', type: 'topic' }
 const routingKey = 'wawawawa'
 
 async function test() {
   const { channel } = await createMqConnection({ vhost })
   await consumeMqAutoAck({
     channel,
-    exchange: { name: 'lalala', type: 'topic' },
+    exchange,
     queue: { name: 'bulabula' },
     routingKey,
     consume: {
@@ -17,17 +17,15 @@ async function test() {
         console.log(msg.content.toString(), '-----msg')
       },
     },
-    logConsume: 1,
   })
-  setTimeout(() => {
+  setInterval(() => {
     pubMq({
       channel,
       exchange,
       routingKey,
-      exchangeType: 'topic',
       data: 's',
     })
-  }, 1500)
+  }, 1000)
 }
 
 

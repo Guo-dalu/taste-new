@@ -77,7 +77,7 @@ const pubMqWithNone = args => pubMq({
 
 const pubMqWithConfirm = args => pubMq({ ...args, confirmPub: true })
 
-const pubMqPersistent = args => pubMq({ ...args, persistent: true })
+const pubMqPersistent = args => pubMq({ ...args, publishOptions: { persistent: true } })
 
 export {
   pubMqWithLog, pubMq, pubMqWithoutWarn, pubMqWithNone, pubMqWithConfirm, pubMqPersistent,
