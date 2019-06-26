@@ -16,7 +16,9 @@
     "watch": "NODE_ENV=development rollup -w -c",
     "dev": "NODE_ENV=development rollup -c",
     "build": "npm run eslint && rimraf dist && NODE_ENV=production rollup -c",
-    "eslint": "eslint src"
+    "eslint": "eslint src",
+    "prepublish": "npm run build",
+    "patch": "npm version patch && npm publish"
   },
   "author": "xuemengge@xingshulin.com",
   "devDependencies": {
