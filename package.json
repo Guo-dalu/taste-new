@@ -1,6 +1,6 @@
 {
   "name": "@xsl/amqp",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "rabbitmq utils for all nodejs service in xsl",
   "repository": {
     "type": "git",
