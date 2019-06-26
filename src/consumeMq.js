@@ -71,9 +71,12 @@ async function consumeMq({
     })
 
     await channel.waitForConnect()
-    logger.info('----- mq Listening for messages')
+    logger.info(`----- mq Listening for messages, 
+    exchange: ${exchangeName}, queue: ${queueName}, routingKey: ${routingKey}`)
   } catch (e) {
-    logger.error(`consume 消息错误, ${queueName}, ${e.stack}`)
+    logger.error(`consume 消息错误, 
+    exchange: ${exchangeName}, queue: ${queueName}, routingKey: ${routingKey},
+    error: ${e.stack}`)
     await warnConsumeIfNeeded(e)
   }
 }
