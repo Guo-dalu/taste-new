@@ -4,7 +4,7 @@
       "@babel/preset-env",
       { 
         // 给test和example文件使用
-        "modules": "cjs",
+        "modules": "cjs"
       } 
     ]
   ],
@@ -17,7 +17,7 @@
     ],
     "@babel/plugin-transform-runtime",
     "@babel/plugin-proposal-optional-chaining",
-    "dynamic-import-node",
+    "dynamic-import-node"
   ],
-  "comments": false,
+  "comments": false
 }

@@ -1,43 +1,44 @@
-import { createMqConnection, pubMq, consumeMqAutoAck } from '../src'
-import mqModel from '../src/model'
+import produce from 'immer'
+// import produceDeep from 'immer-with-deep-equal'
 
-const vhost = 'dform'
-const exchange = { name: 'lalala', type: 'topic' }
-const routingKey = 'wawawawa'
-
-async function test() {
-  const { channel } = await createMqConnection({ vhost })
-  await consumeMqAutoAck({
-    channel,
-    exchange,
-    queue: { name: 'bulabula' },
-    routingKey,
-    consume: {
-      consumeHandler: async msg => {
-        console.log(msg.content.toString(), '-----msg')
-      },
+const baseState = {
+  list: [
+    {
+      name: 'wenbo',
     },
+  ],
+  config: {
+    fontSize: 12,
+  },
+}
+
+const newList = [
+  {
+    name: 'wenbo',
+  },
+]
+
+// const producer = draft => {
+//   draft.list = [
+//     {
+//       name: 'wenbo',
+//     },
+//   ]
+//   draft.config = {
+//     fontSize: 12,
+//   }
+// }
+
+const cleverProducer = draft => {
+  newList.forEach((v, index) => {
+    Object.assign(draft.list[index], v)
   })
-  setInterval(() => {
-    pubMq({
-      channel,
-      exchange,
-      routingKey,
-      data: 's',
-    })
-  }, 1000)
 }
 
+const nextState = produce(baseState, cleverProducer)
 
-async function verifyLog() {
-  await test()
-  const a = await mqModel.findOne({}).sort({ createtime: -1 })
-  console.log({ a })
-}
+console.log('origin  ', nextState, nextState === baseState)
 
-verifyLog()
+// const nextStateWithDeep = produceDeep(baseState, producer)
 
-
-process.on('unhandledRejection', e => {
-  console.log(e)
-})
+// console.log('with deep   ', nextStateWithDeep, nextStateWithDeep === baseState)
