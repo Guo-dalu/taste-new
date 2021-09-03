@@ -40,7 +40,7 @@
     "rollup-plugin-terser": "^5.0.0"
   },
   "dependencies": {
-    "immer": "^6.0.3",
+    "immer": "^9.0.6",
     "immer-with-deep-equal": "^1.0.2",
     "immutable": "^4.0.0-rc.12",
     "rimraf": "^2.6.3"
